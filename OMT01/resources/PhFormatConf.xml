@@ -1,0 +1,24 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<stylesheet>
+  <fonts>
+    <font id="abcde" name="Arial" size="11" bold="true" color="FF0000" />
+    <font id="alfred" name="Calibri" size="16" bold="true" color="00FF00" />
+  </fonts>
+  <fills>
+    <fill id="fillabcde" type="Soild" color="0000FF" />
+  </fills>
+  <numberings>
+    <numbering id="two" idx="901" code="#,##0.00" />
+  </numberings>
+  <borders>
+    <border id="bordertest">
+      <left style="thin" color="00F0F0" />
+      <right style="thin" color="F0F0F0" />
+      <top style="thin" color="FF0000" />
+      <bottom style="thin" color="00FF00" />
+    </border>
+  </borders>
+  <cellformats>
+    <cellformat id="first" font="abcde" fill="fillabcde" numbering="two" border="bordertest" />
+  </cellformats>
+</stylesheet>

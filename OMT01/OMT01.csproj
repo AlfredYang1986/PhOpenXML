@@ -105,12 +105,16 @@
   <ItemGroup>
     <Compile Include="phXlsx\phExcelFacade.cs" />
     <Compile Include="phXlsx\phXlsEnum.cs" />
+    <Compile Include="phXlsx\phXlsxFormatConf.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="resources\PhFormatConf.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

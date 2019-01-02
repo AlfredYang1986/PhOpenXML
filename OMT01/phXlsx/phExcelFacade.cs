@@ -1,6 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
 using DocumentFormat.OpenXml;
 using DocumentFormat.OpenXml.Packaging;
 using DocumentFormat.OpenXml.Spreadsheet;
@@ -39,6 +38,7 @@ namespace OMT01.phXlsx {
             // Font 
             spreadsheetDocument.WorkbookPart.AddNewPart<WorkbookStylesPart>();
             spreadsheetDocument.WorkbookPart.WorkbookStylesPart.Stylesheet = CreateStylesheet();
+            phXlsxFormatConf.getInstance().PushCellFormatsToStylesheet(spreadsheetDocument.WorkbookPart.WorkbookStylesPart.Stylesheet);
             spreadsheetDocument.WorkbookPart.WorkbookStylesPart.Stylesheet.Save();
 
             WorksheetPart worksheetPart = workbookpart.AddNewPart<WorksheetPart>();
