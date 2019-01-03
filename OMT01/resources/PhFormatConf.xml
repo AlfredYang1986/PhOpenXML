@@ -19,6 +19,6 @@
     </border>
   </borders>
   <cellformats>
-    <cellformat id="first" font="abcde" fill="fillabcde" numbering="two" border="bordertest" />
+    <cellformat id="first" font="abcde" fill="fillabcde" numbering="two" border="bordertest" horizontal="center" vertical="center"/>
   </cellformats>
 </stylesheet>

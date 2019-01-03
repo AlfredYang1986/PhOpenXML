@@ -19,8 +19,9 @@ namespace OMT01.phXlsx {
 
         Dictionary<string, int> font_map = new Dictionary<string, int>(); 
         Dictionary<string, int> fill_map = new Dictionary<string, int>(); 
-        Dictionary<string, uint> numbering_map = new Dictionary<string, uint>(); 
-        Dictionary<string, int> border_map = new Dictionary<string, int>(); 
+        Dictionary<string, uint> numbering_map = new Dictionary<string, uint>();
+        Dictionary<string, int> border_map = new Dictionary<string, int>();
+        Dictionary<string, int> cellformat_map = new Dictionary<string, int>();
         XmlDocument _doc = null;
 
         protected phXlsxFormatConf() {
@@ -33,18 +34,7 @@ namespace OMT01.phXlsx {
             pushFillsToStylesheet(ss);
             pushNumberingsToStylesheet(ss);
             pushBordersToStylesheet(ss);
-            foreach (KeyValuePair<string, int> iter in font_map) {
-                Console.WriteLine(iter.Key + " -> " + iter.Value);
-            }
-            foreach (KeyValuePair<string, int> iter in fill_map) {
-                Console.WriteLine(iter.Key + " -> " + iter.Value);
-            }
-            foreach (KeyValuePair<string, uint> iter in numbering_map) {
-                Console.WriteLine(iter.Key + " -> " + iter.Value);
-            }
-            foreach (KeyValuePair<string, int> iter in border_map) {
-                Console.WriteLine(iter.Key + " -> " + iter.Value);
-            }
+            pushCellFormatToStylesheet(ss);
         }
 
         private void pushBordersToStylesheet(Stylesheet ss) {
@@ -85,7 +75,7 @@ namespace OMT01.phXlsx {
                 var bottom = f.SelectSingleNode("bottom");
                 var bottom_style = bottom.Attributes.GetNamedItem("style").Value;
                 var bottom_color = bottom.Attributes.GetNamedItem("color").Value;
-                var bb = new TopBorder() { Style = BorderStyleValues.Thin };
+                var bb = new BottomBorder() { Style = BorderStyleValues.Thin };
                 Color bc = new Color() { Rgb = bottom_color };
                 bb.Append(bc);
                 border.Append(bb);
@@ -192,6 +182,51 @@ namespace OMT01.phXlsx {
                 var font_idx = fonts.Elements<Font>().Count() - 1;
                 font_map.Add(font_id, font_idx);
             }
+        }
+
+        private void pushCellFormatToStylesheet(Stylesheet ss) {
+            var cfs = ss.CellFormats;
+
+            var xn = _doc.SelectSingleNode("stylesheet/cellformats");
+            var nlst = xn.SelectNodes("cellformat");
+            Console.WriteLine(nlst.Count);
+
+            foreach (XmlNode f in nlst) {
+                var cf_id = f.Attributes.GetNamedItem("id").Value;
+
+                var font_id = f.Attributes.GetNamedItem("font").Value;
+                var font_idx = font_map[font_id];
+
+                var fill_id = f.Attributes.GetNamedItem("fill").Value;
+                var fill_idx = fill_map[fill_id];
+
+                var numbering_id = f.Attributes.GetNamedItem("numbering").Value;
+                var numbering_idx = numbering_map[numbering_id];
+
+                var border_id = f.Attributes.GetNamedItem("border").Value;
+                var border_idx = border_map[border_id];
+
+                var hv = HorizontalAlignmentValues.Center;
+                var vv = VerticalAlignmentValues.Center;
+
+                var cf = new CellFormat() {
+                    NumberFormatId = numbering_idx,
+                    FontId = (uint)font_idx,
+                    FillId = (uint)fill_idx,
+                    BorderId = (uint)border_idx,
+                    Alignment = new Alignment() { Horizontal = hv, Vertical = vv },
+                    ApplyNumberFormat = true,
+                };
+
+                cfs.Append(cf);
+
+                var cf_idx = cfs.Elements<CellFormat>().Count() - 1;
+                cellformat_map.Add(cf_id, cf_idx);
+            }
+        }
+
+        public int getCellFormatByName(string name) {
+            return cellformat_map[name];
         }
     }
 }

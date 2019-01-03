@@ -142,6 +142,25 @@ namespace OMT01.phXlsx {
             }
         }
 
+        public void pushValueInCellWithFormat(string name, string value, string c, string format_id) {
+            var filepath = getOutputDir() + name;
+            using (SpreadsheetDocument spreadSheet = SpreadsheetDocument.Open(filepath, true)) {
+                var iter = spreadSheet.WorkbookPart.WorksheetParts.GetEnumerator();
+                iter.MoveNext();
+                var workSheetPart = iter.Current;
+                SheetData sheetData = workSheetPart.Worksheet.GetFirstChild<SheetData>();
+
+                Cell cell = InsertCellInWorksheet(GetColumnName(c), GetRowIndex(c), workSheetPart);
+                cell.CellValue = new CellValue(value);
+                cell.DataType = new EnumValue<CellValues>(CellValues.String);
+
+                var style_idx = phXlsxFormatConf.getInstance().getCellFormatByName(format_id);
+                cell.StyleIndex = (UInt32)style_idx;
+
+                workSheetPart.Worksheet.Save();
+            }
+        }
+
         private Cell InsertCellInWorksheet(string columnName, uint rowIndex, WorksheetPart worksheetPart) {
             Worksheet worksheet = worksheetPart.Worksheet;
             SheetData sheetData = worksheet.GetFirstChild<SheetData>();
